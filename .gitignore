@@ -1,0 +1,12 @@
+checkpoints/*.pb
+checkpoints/*.pth
+static/result/*.jpg
+.idea/*
+.ipynb_checkpoints/*
+__pycache__/*
+server.log
+*.jpg
+easy_example/*
+static/backup/*
+static/backup_jd/*
+

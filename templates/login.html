@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <script src="static/jquery.min.js"></script>
+    <script src="static/popper.min.js"></script>
+    <script src="static/bootstrap.min.js"></script>
+    <title>Virtual Try-On on Web</title>
+
+</head>
+<body class="text-light text-dark">
+
+<div class="jumbotron">
+    <h1> Upload or select images to Virtual Try On.</h1>
+    {% if info %}
+    <h6> Info: {{info}}</h6>
+    {%endif%}
+</div>
+<div class="container" bgcolor="#ffffee">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <p>Upload your person picture file：
+        <p/>
+
+        <input id="person_image" name="person_image" type="file" class="file" data-show-preview="false"
+               accept=".jpg, .jpeg">
+
+
+        <HR style="border:1 dashed #d2cdc8" width="100%" color=#987cb9 SIZE=1>
+        <div class="input-group mb-3">
+            <p>
+            {%if img_list%}
+
+            {% for name, index in img_list %}
+            <img src="{{name}}">
+            <label>
+                <input type="radio" name="optionsRadios" id="options{{index}}" value="option{{index}}">
+            </label>
+
+            
+            {% endfor %}
+            {%endif%}
+            
+            <p/>
+            
+            <p>Or EVEN your personal cloth image file! (but only 192*256 plz)：<p/>
+            
+
+        <input id="cloth_image" name="cloth_image" type="file" class="file" data-show-preview="false"
+               accept=".jpg, .jpeg">
+            
+        </div>
+        <HR style="border:1 dashed #d2cdc8" width="100%" color=#987cb9 SIZE=1>
+
+        <button type="submit" class="btn btn-success">confirm</button>
+    </form>
+
+    <HR style="border:1 dashed #d2cdc8" width="100%" color=#987cb9 SIZE=2>
+
+
+    {%if result1 %}
+        <p>Try-On Result: </p>
+        <img src="{{result1}}" width=192>
+        <img src="{{result2}}" width=192>
+    {% endif %}
+
+    <HR style="border:1 dashed #d2cdc8" width="100%" color=#987cb9 SIZE=2>
+    <p>
+        Powered By Imba.
+    </p>
+</div>
+
+</body>
+</html>

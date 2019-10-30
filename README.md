@@ -63,7 +63,8 @@ match_server* | 提供衣服推荐接口相关逻辑
 
 ## checkpoints下载
 
-*coming soon..*
+~*coming soon..*~  
+[download link](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
 
 ## 参考
 

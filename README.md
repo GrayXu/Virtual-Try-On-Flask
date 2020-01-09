@@ -10,9 +10,9 @@
 
 启动：`python main.py`
 
-如果你只是想使用纯网络模型，请见`Model.py`和模板[notebook](http://github.com/GrayXu/Virtual-Try-On/blob/master/Template.ipynb)  
+如果你只是想使用纯网络模型，请见`Model.py`和模板[notebook](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Template.ipynb)  
 
-其中核心的外部调用接口为[predict](http://github.com/GrayXu/Virtual-Try-On/blob/master/Model.py#L90)函数，关注文档注释提及的5个flag参数即可。
+其中核心的外部调用接口为[predict](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Model.py#L90)函数，关注文档注释提及的5个flag参数即可。
 ```
 def predict(self, human_img, c_img, need_pre=True, need_bright=False, keep_back=False, need_dilate=False, check_dirty=False):
     '''
@@ -42,7 +42,7 @@ torchvision==0.2.0
 
 ## 占用
 
-显存约占用7.12GB，单张图片预测约为0.62s（JPPNet 0.6s, CPVTON 0.02s）。  
+Tesla P40上，显存约占用7.12GB，单张图片预测约为0.62s（JPPNet 0.6s, CPVTON 0.02s）。  
 *若关注Real Time，请更换人体特征提取思路，如尝试使用CE2P*
 
 ## 文件说明

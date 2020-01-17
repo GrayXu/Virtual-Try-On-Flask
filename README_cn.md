@@ -1,8 +1,6 @@
 # Vitrual Try-On *Flask*
 
-<center class="half">
-    <img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182357.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182429.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182443.png" width="100"/>
-</center>
+![20200118004320.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004320.png)![20200118004342.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004342.png)![20200118004359.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004359.png)
 
 虚拟试衣网络的核心代码，通过JPP-Net和CP-VTON多阶段深度网络，在更上层提供了**易于编程**的接口，并整合了一些传统图像处理接口。
 
@@ -83,6 +81,15 @@ checkpoints/\* | 存预训练模型
 
 ~~*coming soon..*~~  
 [download link on *Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
+
+# TODO List
+
+- [x] Optimize model  
+- [x] Web try-on service  
+- [x] Basic documentation and comments  
+- [ ] Client post documentation  
+- [ ] Faster models download supports  
+- [ ] CPU supports
 
 # References
 

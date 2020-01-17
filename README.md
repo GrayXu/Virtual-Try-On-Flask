@@ -1,10 +1,8 @@
 # Vitrual Try-On *Flask*
 
-[中文文档](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/README_cn.md)
+[*中文版*](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/README_cn.md)
 
-<center class="half">
-    <img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182357.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182429.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182443.png" width="100"/>
-</center>
+![20200118004320.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004320.png)![20200118004342.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004342.png)![20200118004359.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004359.png)
 
 A multi-stage virtual try-on deep neural networks based on JPP-Net and CP-VTON. We provide simple and easy-to-handle api on upper level, and combine some traditional image processing methods.
 
@@ -65,8 +63,7 @@ This multi-stage network consists of 3 parts:
 - **JPP-Net**: Extract human features, make pose estimation & human parsing
 - **Geometric Matching Module**: Input human features and clothes images, and twist clothes based on learned thin-plate-spline algorithm.
 - **Try-on Module**: Input human feature and twisted clothes images, and generate try-on images.
- 
-综合人体特征和扭曲后的衣服图片，进行人体和衣服合成。
+
 
 ![20200117182844.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182844.png)
 
@@ -92,12 +89,12 @@ checkpoints/\* | checkpoints dir
 
 # TODO List
 
-[x] Optimize model  
-[x] Web try-on service  
-[x] Basic documentation and comments  
-[] Client post documentation  
-[] Faster models download supports  
-[] CPU supports
+- [x] Optimize model  
+- [x] Web try-on service  
+- [x] Basic documentation and comments  
+- [ ] Client post documentation  
+- [ ] Faster models download supports  
+- [ ] CPU supports
 
 # References
 

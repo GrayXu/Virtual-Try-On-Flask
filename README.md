@@ -1,74 +1,107 @@
-# Vitrual Try On Flask
+# Vitrual Try-On *Flask*
 
-虚拟试衣网络的核心代码仓库。 
+[中文文档](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/README_cn.md)
 
-实现功能:  
- - 实现快速的人体图和衣服图到穿搭图片的合成
- - 基于Flask提供Web服务和后端响应服务
- - 基于SKU提供推荐穿搭功能
- - 基于安卓提供多平台客户端
+<center class="half">
+    <img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182357.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182429.png" width="100"/><img src="https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182443.png" width="100"/>
+</center>
 
-启动：`python main.py`
+A multi-stage virtual try-on deep neural networks based on JPP-Net and CP-VTON. We provide simple and easy-to-handle api on upper level, and combine some traditional image processing methods.
 
-如果你只是想使用纯网络模型，请见`Model.py`和模板[notebook](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Template.ipynb)  
+Feature:
+- Fast **Human_Image + Cloth_Image = Gen_Image**, put on a specified upper clothes for specified people.
+- Web and Backend response service on *Flask*
 
-其中核心的外部调用接口为[predict](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Model.py#L90)函数，关注文档注释提及的5个flag参数即可。
+# How to use
+
+## Run complete server codes
+
+1. Download 3 [pretrained models](#checkpoints) to `/checkpoints`.
+2. install [dependency packages](#Dependency)
+3. Start Flask service `python main.py`
+
+## Run only network codes
+
+`Model.py` is the only file that needs attention. After install dependency and initialize `model.init(path...)`, you can directly call `model.predict(human_img, c_img, ...)` to make prediction. All image are numpy arrays on RGB channels.
+
+[Template notebook](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Template.ipynb) would be a nice example to show you how to use it.
+
+Model's core external function is ["predict()"](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/Model.py#L36). Just pay attention to 5 flag parameters in documentation comments.
+
 ```
 def predict(self, human_img, c_img, need_pre=True, need_bright=False, keep_back=False, need_dilate=False, check_dirty=False):
     '''
-    输入：
-        human_img为人体图片，c_img为衣服图片,均为numpy array with shape(256,192,3) RGB
-    五个flag:
-        need_pre为是否需要预处理（crop+resize到256*192），在LIP数据集上关闭need_pre效果较好（upsample损失）
-        need bright为亮度增强，
-        keep back为基于mask保持除了上衣以外的部分，
-        need dilate为膨胀柔化keep back的mask，需要keep_back开启 
-        check_dirty为增加检查数据是否有肢体遮挡交叉（可能检测不全）  
-    返回：
-        一个(256,192,3)的穿上衣服的图片，
-        画面中人体的置信度，0则为触发强排除条件（检测难样本等）
+    parameters: 
+        human_img: human's image
+        c_img: cloth image with the shape of (256,192,3) RGB
+        need_pre: need preprocessing, including crop and zoom 
+        need_bright: brightness enhancement
+        keep_back: keep image's background
+        need_dilate: if keep_back is True, and you need dilate the mask
+        check_dirty: check limb cross
+    return: 
+        a (256, 192, 3) image with specified people wearing specified clothes
+        confidence of this image (a float)
     '''
-    ...
 ```
 
+# Dependency
 
-## 依赖
-
-torch==1.2.0  
 tensorflow==1.12.0  
+torch==1.2.0  
 torchvision==0.2.0  
 
-目前代码需要在GPU环境运行，若要修改到CPU环境，请删除所有CPVTON.py和Networks.py两个文件中所有的`.cuda()`调用。
+For now, GPU environment is essential. If you want to run it on CPU environment, delete all `.cuda()` calls in CPVTON.py and Networks.py.  
 
-## 占用
+# Usage
 
-Tesla P40上，显存约占用7.12GB，单张图片预测约为0.62s（JPPNet 0.6s, CPVTON 0.02s）。  
-*若关注Real Time，请更换人体特征提取思路，如尝试使用CE2P*
+On Tesla P40, GPU memory usage is about 7.12Gb. Each prediction costs about 0.62s (JPPNet 0.6s, CPVTON 0.02s).
 
-## 文件说明
+*If you want Real-Time speed, try to change the method of human feature extraction, like CE2P.*
+
+# Network Architecture
+
+This multi-stage network consists of 3 parts:
+- **JPP-Net**: Extract human features, make pose estimation & human parsing
+- **Geometric Matching Module**: Input human features and clothes images, and twist clothes based on learned thin-plate-spline algorithm.
+- **Try-on Module**: Input human feature and twisted clothes images, and generate try-on images.
+ 
+综合人体特征和扭曲后的衣服图片，进行人体和衣服合成。
+
+![20200117182844.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200117182844.png)
+
+# File
 
 文件名 | 功能  
 -|-  
-main.py | flask服务相关  
-get.py | 向flask发起predict请求  
-Model.py | 提供虚拟试衣网络的外部接口
-CPVTON.py | CPVTON模型整合预测代码
-networks.py | CPVTON模型网络定义
-JPPNet.py | JPP-Net 预测代码
-static/* | flask的静态访问资源
-data/\*, example/\* | 样例测试图片
-template/\* | flask的模板html based on Jinjia
-checkpoints/\* | 存预训练模型
-match_server* | 提供衣服推荐接口相关逻辑
+main.py | Flask service  
+get.py | clients post predict requests to Flask server  
+Model.py | Virtual Try-on Net
+CPVTON.py | CPVTON model (GMM+TOM)
+networks.py | CPVTON's basic network unit
+JPPNet.py | JPP-Net model's init & predict
+static/* | static resource
+data/\*, example/\* | example test images
+template/\* | Flask's html file based on Jinjia
+checkpoints/\* | checkpoints dir
 
-## checkpoints下载
+# Checkpoints
 
-~*coming soon..*~  
-[download link](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
+~~*coming soon..*~~  
+[download link on *Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
 
-## 参考
+# TODO List
 
-模型的设计基于JPP-Net与CPVTON，及其开源代码。  
+[x] Optimize model  
+[x] Web try-on service  
+[x] Basic documentation and comments  
+[] Client post documentation  
+[] Faster models download supports  
+[] CPU supports
+
+# References
+
+Model designs are based on JPP-Net & CPVTON, and their open-source repo on Github.  
 
 [**VITON**: An Image-based Virtual Try-on Network](https://arxiv.org/abs/1711.08447v1),Xintong Han, Zuxuan Wu, Zhe Wu, Ruichi Yu, Larry S. Davis. **CVPR 2018**
 

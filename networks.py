@@ -1,4 +1,7 @@
 #coding=utf-8
+'''
+This file defines how the final model consists with basic network units and some weights init-methods
+'''
 import torch
 import torch.nn as nn
 from torch.nn import init

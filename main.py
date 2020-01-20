@@ -18,14 +18,12 @@ import base64
 from datetime import datetime
 import json
 
-
+# Use base64 to send & receive images between clients and the server
 def readb64(base64_string):
     sbuf = BytesIO()
     sbuf.write(base64.b64decode(base64_string))
     res = Image.open(sbuf)
-    res = cv2.cvtColor(np.array(res), cv2.COLOR_RGB2BGR)
-    res = cv2.cvtColor(res, cv2.COLOR_BGR2RGB)
-    return res
+    return np.array(res)
 
 
 def writeb64(img):
@@ -58,6 +56,7 @@ for cloth in cloth_list_raw:
         counter += 1
 
 
+# Use "/web" url to get web page
 @app.route('/web')
 def hello_world():
     return render_template('login.html', img_list=cloth_list)
@@ -82,7 +81,7 @@ def upload_image():
         o_name, h_name = run_model_web(
             person_image, cloth_list[index][0].split("\\")[-1], cloth_image)
         end_time = time.time()
-        if o_name is None:
+        if o_name is None: # bad cloth image
             return 'I told you only clothes image with shape 256*192*3'
         else:
             return render_template('login.html', img_list=cloth_list, result1=h_name, result2=o_name, info="time: %.3f" % (end_time-start_time))
@@ -91,8 +90,7 @@ def upload_image():
 def run_model_web(f, cloth_name, cloth_f=None):
     '''
     为web服务进行预测。cloth_name和cloth_f中必有一个有内容，优先选择cloth_f，即用户上传的衣服图片
-    prediction service. 
-    NOTE: cloth_name and cloth_f cannot be both None. cloth_f is prior, which is from user upload.
+    prediction service. cloth_name and cloth_f cannot be both None. cloth_f is prior, which is from user upload.
     '''
     if cloth_f is None:
         print(f, cloth_name)
@@ -140,6 +138,20 @@ def getimg():
     return [img_person, img_cloth]
 
 
+'''
+json format example:
+client:
+    {
+        'image_person':'...',
+        'image_cloth':'...'
+    }
+
+server:
+    {
+        'status':'ok',
+        'output_image':'...'
+    }
+'''
 @app.route('/cloth', methods=['GET', 'POST'])
 def Hello_cloth():
     '''
@@ -150,17 +162,17 @@ def Hello_cloth():
     output_json = {}
     status = 'ok'
     if request.method == 'POST':
+        # temp file would be writed to root dir
         input_person, input_cloth = getimg()
         cv2.imwrite('in.jpg', input_person)
         input_person = input_person[60:580, 45:435]
         cv2.imwrite('in_2.jpg', input_person)
-        output_img, v = model.predict(
-            input_person, input_cloth, need_bright=True, keep_back=True, need_dilate=True)
+        output_img, v = model.predict(input_person, input_cloth, need_bright=True, keep_back=True, need_dilate=True)
         output_img = cv2.cvtColor(output_img, cv2.COLOR_RGB2BGR)
         cv2.imwrite('out.jpg', output_img)
         print("v:"+str(v))
         output_base64 = writeb64(output_img)
-        if v < 0.1:
+        if v < 0.1: # confidence is too weak to show
             status = 'failure'
         else:
             status = 'ok'
@@ -168,14 +180,15 @@ def Hello_cloth():
         output_json["output_image"] = output_base64
         output_str = json.dumps(output_json)
         return output_str
-    return "please use http client to request !"
+    return "please use http client to request!"
 
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-    if platform.system() == 'Linux':
-        app.run(host='0.0.0.0', port=5000)
-    else:
-        app.run()  # only for running test locally on Windows
+    # run server locally
+    app.run()
+
+    # or as a servers
+    # app.run(host='0.0.0.0', port=5000)

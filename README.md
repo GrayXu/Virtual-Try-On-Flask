@@ -4,7 +4,7 @@
 
 ![20200118004320.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004320.png)![20200118004342.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004342.png)![20200118004359.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004359.png)
 
-A multi-stage virtual try-on deep neural networks based on JPP-Net and CP-VTON. We provide simple and easy-to-handle api on upper level, and combine some traditional image processing methods.
+A multi-stage virtual try-on deep neural networks based on JPP-Net and CP-VTON. We provide **SIMPLE and EASY-to-handle API** on upper level, and combine some traditional image processing methods.
 
 Feature:
 - Fast **Human_Image + Cloth_Image = Gen_Image**, put on a specified upper clothes for specified people.
@@ -17,6 +17,8 @@ Feature:
 1. Download 3 [pretrained models](#checkpoints) to `/checkpoints`.
 2. install [dependency packages](#Dependency)
 3. Start Flask service `python main.py`
+
+Clients encode image in base64, and send them in [Json format](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/main.py#L141). Then server would return results in the same rule.
 
 ## Run only network codes
 
@@ -49,9 +51,9 @@ tensorflow==1.12.0
 torch==1.2.0  
 torchvision==0.2.0  
 
-For now, GPU environment is essential. If you want to run it on CPU environment, delete all `.cuda()` calls in CPVTON.py and Networks.py.  
+*For now, GPU environment is essential. If you want to run it on CPU environment, delete all `.cuda()` calls in CPVTON.py and Networks.py.*  
 
-# Usage
+# Hardware Usage
 
 On Tesla P40, GPU memory usage is about 7.12Gb. Each prediction costs about 0.62s (JPPNet 0.6s, CPVTON 0.02s).
 
@@ -69,7 +71,7 @@ This multi-stage network consists of 3 parts:
 
 # File
 
-文件名 | 功能  
+Fname | Usage  
 -|-  
 main.py | Flask service  
 get.py | clients post predict requests to Flask server  
@@ -85,16 +87,17 @@ checkpoints/\* | checkpoints dir
 # Checkpoints
 
 ~~*coming soon..*~~  
-[download link on *Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
+download link on [*Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t) and [*Baidu Pan*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
+
 
 # TODO List
 
 - [x] Optimize model  
 - [x] Web try-on service  
 - [x] Basic documentation and comments  
-- [ ] Client post documentation  
-- [ ] Faster models download supports  
-- [ ] CPU supports
+- [x] Client post documentation  
+- [x] Faster models download support  
+- [ ] CPU support
 
 # References
 

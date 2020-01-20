@@ -16,6 +16,8 @@
 2. 安装相关[依赖](#Dependency)
 3. 启动Flask服务：`python main.py`
 
+客户端和服务通过base64编码图片后，通过Json格式来进行通讯。[Json format](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/main.py#L141)
+
 ## 如果只想使用纯网络模型
   
 `Model.py`为你唯一需要关心的代码文件。安装了依赖并进行初始化`model.init(path...)`之后，直接通过`model.predict(human_img, c_img, ...)`就可以完成模型的前向预测。操作的图片对象均为RGB通道的numpy array。
@@ -46,9 +48,9 @@ torch==1.2.0
 tensorflow==1.12.0  
 torchvision==0.2.0  
 
-目前代码需要在**GPU**环境运行，若要修改到CPU环境，请删除所有CPVTON.py和Networks.py两个文件中所有的`.cuda()`调用。
+*目前代码需要在**GPU**环境运行，若要修改到CPU环境，请删除所有CPVTON.py和Networks.py两个文件中所有的`.cuda()`调用。*
 
-# Usage
+# Hardware Usage
 
 Tesla P40上，显存约占用7.12GB，单张图片预测约为0.62s（JPPNet 0.6s, CPVTON 0.02s）。  
 *若关注Real Time的高速，请更换人体特征提取思路，如尝试使用CE2P*
@@ -80,16 +82,16 @@ checkpoints/\* | 存预训练模型
 # Checkpoints
 
 ~~*coming soon..*~~  
-[download link on *Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t)
+下载链接：[*Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t) and [*百度网盘*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
 
 # TODO List
 
 - [x] Optimize model  
 - [x] Web try-on service  
 - [x] Basic documentation and comments  
-- [ ] Client post documentation  
-- [ ] Faster models download supports  
-- [ ] CPU supports
+- [x] Client post documentation  
+- [x] Faster models download support
+- [ ] CPU support
 
 # References
 

@@ -25,7 +25,7 @@ class Model(object):
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    def init(self, pb_path, gmm_path, tom_path):
+    def __init__(self, pb_path, gmm_path, tom_path):
         '''
         传入三个参数，分别是JPP、GMM、TOM三个模型的预训练文件路径.
         parameters: 3 pre-trained model(JPP, GMM, TOM) files' pathes

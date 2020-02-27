@@ -39,7 +39,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 model = Model("checkpoints/jpp.pb",
               "checkpoints/gmm.pth",
-              "checkpoints/tom.pth")
+              "checkpoints/tom.pth",
+              use_cuda=True)
 
 app = Flask(__name__)
 

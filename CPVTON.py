@@ -1,10 +1,8 @@
 # coding=utf-8
 '''
 CPVTON的模型定义接口。
-TODO: 可能有一些多余的cpu往返传输cuda额外开销
 
 This file implements CP-VTON.
-TODO: extra costs of data transmission between cpu and gpu by .cuda() & .cpu() 
 '''
 
 import torch
@@ -31,20 +29,23 @@ transformer = transforms.Compose([
 
 class CPVTON(object):
 
-    def __init__(self, gmm_path, tom_path):
+    def __init__(self, gmm_path, tom_path, use_cuda=True):
         '''
         初始化两个模型的预训练数据
         init pretrained models
         '''
-        self.gmm = GMM()
-        load_checkpoint(self.gmm, gmm_path)
+        self.use_cuda = use_cuda
+        self.gmm = GMM(use_cuda=use_cuda)
+        load_checkpoint(self.gmm, gmm_path, use_cuda=use_cuda)
         self.gmm.eval()
         self.tom = UnetGenerator(
             23, 4, 6, ngf=64, norm_layer=nn.InstanceNorm2d)
-        load_checkpoint(self.tom, tom_path)
+        load_checkpoint(self.tom, tom_path, use_cuda=use_cuda)
         self.tom.eval()
-        self.gmm.cuda()
-        self.tom.cuda()
+        if use_cuda:
+            self.gmm.cuda()
+            self.tom.cuda()
+        print("use_cuda = "+str(self.use_cuda))
 
     def predict(self, parse_array, pose_map, human, c):
         '''
@@ -75,13 +76,18 @@ class CPVTON(object):
 
         agnostic = torch.cat([shape, im_h, pose_map], 0)
 
-        # batch==1
-        agnostic = agnostic.unsqueeze(0).cuda()
-        c = c.unsqueeze(0).cuda()
-
-        # warp result
-        grid, theta = self.gmm(agnostic.cuda(), c.cuda())
-        c_warp = F.grid_sample(c.cuda(), grid, padding_mode='border')
+        if self.use_cuda:
+            # batch==1
+            agnostic = agnostic.unsqueeze(0).cuda()
+            c = c.unsqueeze(0).cuda()
+            # warp result
+            grid, theta = self.gmm(agnostic.cuda(), c.cuda())
+            c_warp = F.grid_sample(c.cuda(), grid, padding_mode='border')
+        else:
+            agnostic = agnostic.unsqueeze(0)
+            c = c.unsqueeze(0)
+            grid, theta = self.gmm(agnostic, c)
+            c_warp = F.grid_sample(c, grid, padding_mode='border')
 
         tensor = (c_warp.detach().clone()+1)*0.5 * 255
         tensor = tensor.cpu().clamp(0, 255)
@@ -90,10 +96,18 @@ class CPVTON(object):
         c_warp = transformer(np.transpose(array[0], axes=(1, 2, 0)))
         c_warp = c_warp.unsqueeze(0)
 
-        outputs = self.tom(torch.cat([agnostic.cuda(), c_warp.cuda()], 1))
+        if self.use_cuda:
+            outputs = self.tom(torch.cat([agnostic.cuda(), c_warp.cuda()], 1))
+        else:
+            outputs = self.tom(torch.cat([agnostic, c_warp], 1))
+
         p_rendered, m_composite = torch.split(outputs, 3, 1)
         p_rendered = torch.tanh(p_rendered)
         m_composite = torch.sigmoid(m_composite)
-        p_tryon = c_warp.cuda() * m_composite + p_rendered * (1 - m_composite)
+        if self.use_cuda:
+            p_tryon = c_warp.cuda() * m_composite + p_rendered * (1 - m_composite)
+        else:
+            p_tryon = c_warp * m_composite + p_rendered * (1 - m_composite)
+            
 
         return (p_tryon, c_warp)

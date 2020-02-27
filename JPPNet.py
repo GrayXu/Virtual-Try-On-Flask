@@ -18,8 +18,8 @@ class JPP(object):
     IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
     
     def __init__(self, pb_path):
-        gpu_options = tf.GPUOptions(allow_growth=True)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) 
+        options = tf.GPUOptions(allow_growth=True)
+        sess = tf.Session(config=tf.ConfigProto(gpu_options=options)) 
         self.sess = tf.Session()
         with gfile.FastGFile(pb_path, 'rb') as f:
             graph_def = tf.GraphDef()

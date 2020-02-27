@@ -25,13 +25,13 @@ class Model(object):
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    def __init__(self, pb_path, gmm_path, tom_path):
+    def __init__(self, pb_path, gmm_path, tom_path, use_cuda=True):
         '''
         传入三个参数，分别是JPP、GMM、TOM三个模型的预训练文件路径.
         parameters: 3 pre-trained model(JPP, GMM, TOM) files' pathes
         '''
         self.jpp = JPP(pb_path)
-        self.cpvton = CPVTON(gmm_path, tom_path)
+        self.cpvton = CPVTON(gmm_path, tom_path, use_cuda=use_cuda)
 
     def predict(self, human_img, c_img, need_pre=True, need_bright=False, keep_back=False, need_dilate=False, check_dirty=False):
         '''

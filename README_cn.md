@@ -2,7 +2,7 @@
 
 ![20200118004320.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004320.png)![20200118004342.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004342.png)![20200118004359.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004359.png)
 
-虚拟试衣网络的核心代码，通过JPP-Net和CP-VTON多阶段深度网络，在更上层提供了**易于编程**的接口，并整合了一些传统图像处理接口。
+虚拟试衣网络的核心代码，通过[JPP-Net和CP-VTON](References)多阶段深度网络，在更上层提供了**易于编程**的接口，并整合了一些传统图像处理方法为接口。
 
 实现功能:  
  - 实现快速的**人体图+衣服图=穿搭图片**的合成，让人穿上指定的衣服。
@@ -48,7 +48,8 @@ torch==1.2.0
 tensorflow==1.12.0  
 torchvision==0.2.0  
 
-*目前代码需要在**GPU**环境运行，若要修改到CPU环境，请删除所有CPVTON.py和Networks.py两个文件中所有的`.cuda()`调用。*
+~~*目前代码需要在**GPU**环境运行，若要修改到CPU环境，请删除所有CPVTON.py和Networks.py两个文件中所有的`.cuda()`调用。*~~  
+CPU Mode: `Model(.., use_cuda = False)`
 
 # Hardware Usage
 
@@ -86,12 +87,12 @@ checkpoints/\* | 存预训练模型
 
 # TODO List
 
-- [x] Optimize model  
-- [x] Web try-on service  
-- [x] Basic documentation and comments  
-- [x] Client post documentation  
-- [x] Faster models download support
-- [ ] CPU support
+- [x] 优化整合原模型  
+- [x] 网页端虚拟试衣服务  
+- [x] 基础完备的文档和注释  
+- [x] 客户端post规范文档  
+- [x] 预训练模型下载
+- [x] CPU环境支持
 
 # References
 
@@ -101,7 +102,7 @@ checkpoints/\* | 存预训练模型
 
 [(**CP-VTON**) Toward Characteristic-Preserving Image-based Virtual Try-On Networks](https://arxiv.org/abs/1807.07688), Bochao Wang, Huabin Zheng, Xiaodan Liang, Yimin Chen, Liang Lin, Meng Yang. **ECCV 2018**
 
-[(**JPP-Net**)Look into Person: Joint Body Parsing & Pose Estimation Network and A New Benchmark](https://arxiv.org/abs/1804.01984), Xiaodan Liang, Ke Gong, Xiaohui Shen, Liang Lin, **T-PAMI 2018**.
+[(**JPP-Net**) Look into Person: Joint Body Parsing & Pose Estimation Network and A New Benchmark](https://arxiv.org/abs/1804.01984), Xiaodan Liang, Ke Gong, Xiaohui Shen, Liang Lin, **T-PAMI 2018**.
 
 ----
 

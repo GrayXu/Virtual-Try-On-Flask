@@ -1,10 +1,10 @@
 # Vitrual Try-On *Flask*
 
-[*中文版*](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/README_cn.md)
+[中文文档📚](http://github.com/GrayXu/Virtual-Try-On-Flask/blob/master/README_cn.md)
 
 ![20200118004320.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004320.png)![20200118004342.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004342.png)![20200118004359.png](https://raw.githubusercontent.com/GrayXu/Online-Storage/master/img/20200118004359.png)
 
-A multi-stage virtual try-on deep neural networks based on JPP-Net and CP-VTON. We provide **SIMPLE and EASY-to-handle API** on upper level, and combine some traditional image processing methods.
+A multi-stage virtual try-on deep neural networks based on [JPP-Net and CP-VTON](#References). We provide **SIMPLE and EASY-to-handle API** on upper level, and combine some traditional image processing methods.
 
 Feature:
 - Fast **Human_Image + Cloth_Image = Gen_Image**, put on a specified upper clothes for specified people.
@@ -51,7 +51,8 @@ tensorflow==1.12.0
 torch==1.2.0  
 torchvision==0.2.0  
 
-*For now, GPU environment is essential. If you want to run it on CPU environment, delete all `.cuda()` calls in CPVTON.py and Networks.py.*  
+~~*For now, GPU environment is essential. If you want to run it on CPU environment, delete all `.cuda()` calls in CPVTON.py and Networks.py.*~~   
+CPU Mode: `Model(.., use_cuda = False)`
 
 # Hardware Usage
 
@@ -97,7 +98,7 @@ download link on [*Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_
 - [x] Basic documentation and comments  
 - [x] Client post documentation  
 - [x] Faster models download support  
-- [ ] CPU support
+- [x] CPU support
 
 # References
 
@@ -107,7 +108,7 @@ Model designs are based on JPP-Net & CPVTON, and their open-source repo on Githu
 
 [(**CP-VTON**) Toward Characteristic-Preserving Image-based Virtual Try-On Networks](https://arxiv.org/abs/1807.07688), Bochao Wang, Huabin Zheng, Xiaodan Liang, Yimin Chen, Liang Lin, Meng Yang. **ECCV 2018**
 
-[(**JPP-Net**)Look into Person: Joint Body Parsing & Pose Estimation Network and A New Benchmark](https://arxiv.org/abs/1804.01984), Xiaodan Liang, Ke Gong, Xiaohui Shen, Liang Lin, **T-PAMI 2018**.
+[(**JPP-Net**) Look into Person: Joint Body Parsing & Pose Estimation Network and A New Benchmark](https://arxiv.org/abs/1804.01984), Xiaodan Liang, Ke Gong, Xiaohui Shen, Liang Lin, **T-PAMI 2018**.
 
 ----
 

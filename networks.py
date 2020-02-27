@@ -386,10 +386,11 @@ class Vgg19(nn.Module):
         return out
 
 class VGGLoss(nn.Module):
-    def __init__(self, layids = None):
+    def __init__(self, layids = None, use_cuda=True):
         super(VGGLoss, self).__init__()
         self.vgg = Vgg19()
-        self.vgg.cuda()
+        if use_cuda:
+            self.vgg.cuda()
         self.criterion = nn.L1Loss()
         self.weights = [1.0/32, 1.0/16, 1.0/8, 1.0/4, 1.0]
         self.layids = layids
@@ -406,15 +407,14 @@ class VGGLoss(nn.Module):
 class GMM(nn.Module):
     """ Geometric Matching Module
     """
-    def __init__(self):
+    def __init__(self, use_cuda = True):
         super(GMM, self).__init__()
-#         self.extractionA = FeatureExtraction(22, ngf=64, n_layers=3, norm_layer=nn.BatchNorm2d) 
         self.extractionA = FeatureExtraction(20, ngf=64, n_layers=3, norm_layer=nn.BatchNorm2d) 
         self.extractionB = FeatureExtraction(3, ngf=64, n_layers=3, norm_layer=nn.BatchNorm2d)
         self.l2norm = FeatureL2Norm()
         self.correlation = FeatureCorrelation()
-        self.regression = FeatureRegression(input_nc=192, output_dim=2*5**2, use_cuda=True)
-        self.gridGen = TpsGridGen(256, 192, use_cuda=True, grid_size=5)
+        self.regression = FeatureRegression(input_nc=192, output_dim=2*5**2, use_cuda=use_cuda)
+        self.gridGen = TpsGridGen(256, 192, use_cuda=use_cuda, grid_size=5)
         
     def forward(self, inputA, inputB):
         featureA = self.extractionA(inputA)
@@ -427,16 +427,18 @@ class GMM(nn.Module):
         grid = self.gridGen(theta)
         return grid, theta
 
-def save_checkpoint(model, save_path):
+def save_checkpoint(model, save_path, use_cuda=True):
     if not os.path.exists(os.path.dirname(save_path)):
         os.makedirs(os.path.dirname(save_path))
 
     torch.save(model.cpu().state_dict(), save_path)
-    model.cuda()
+    if use_cuda:
+        model.cuda()
 
-def load_checkpoint(model, checkpoint_path):
+def load_checkpoint(model, checkpoint_path, use_cuda=True):
     if not os.path.exists(checkpoint_path):
-        return "wtf"
+        return "failed in loading checkpoint!"
     model.load_state_dict(torch.load(checkpoint_path))
-    model.cuda()
+    if use_cuda:
+        model.cuda()
 

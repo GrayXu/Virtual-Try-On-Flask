@@ -83,7 +83,7 @@ checkpoints/\* | 存预训练模型
 # Checkpoints
 
 ~~*coming soon..*~~  
-下载链接：[*Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t) and [*百度网盘*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
+下载链接：[*Google Drive*](https://drive.google.com/file/d/125UtOS4T4RBji8lXtm9WEwD1KcHG4F1g/view?usp=sharing) and [*百度网盘*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
 
 # TODO List
 

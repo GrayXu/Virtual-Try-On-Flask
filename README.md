@@ -88,7 +88,7 @@ checkpoints/\* | checkpoints dir
 # Checkpoints
 
 ~~*coming soon..*~~  
-download link on [*Google Drive*](https://drive.google.com/open?id=1kV9Xf9tDaqH_-2ZDBA6-_lMg8_FmvE1t) and [*Baidu Pan*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
+download link on [*Google Drive*](https://drive.google.com/file/d/125UtOS4T4RBji8lXtm9WEwD1KcHG4F1g/view?usp=sharing) and [*Baidu Pan*](https://pan.baidu.com/s/1e8tKEz7hpHAxqV6B5_hOIw)
 
 
 # TODO List
